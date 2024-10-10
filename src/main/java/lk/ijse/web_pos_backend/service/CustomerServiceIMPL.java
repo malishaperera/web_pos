@@ -1,6 +1,8 @@
 package lk.ijse.web_pos_backend.service;
 
 import jakarta.transaction.Transactional;
+import lk.ijse.web_pos_backend.cutomObj.CustomerErrorResponse;
+import lk.ijse.web_pos_backend.cutomObj.CustomerResponse;
 import lk.ijse.web_pos_backend.dao.CustomerDao;
 import lk.ijse.web_pos_backend.dto.impl.CustomerDTO;
 import lk.ijse.web_pos_backend.entity.CustomerEntity;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -59,5 +62,21 @@ public class CustomerServiceIMPL implements CustomerService {
         }else {
             customerDao.deleteById(customerId);
         }
+    }
+
+    //Get Customer
+    @Override
+    public CustomerResponse getSelectCustomer(String customerId) {
+        if (customerDao.existsById(customerId)) {
+            return mapping.convertToCustomerDTO(customerDao.getReferenceById(customerId));
+        }else {
+            return new CustomerErrorResponse(0,"Customer not found");
+        }
+    }
+
+    //Get All Customers
+    @Override
+    public List<CustomerDTO> getAllCustomers() {
+        return mapping.convertCustomerToDTO(customerDao.findAll());
     }
 }

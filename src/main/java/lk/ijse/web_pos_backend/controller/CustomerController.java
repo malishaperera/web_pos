@@ -1,6 +1,7 @@
 package lk.ijse.web_pos_backend.controller;
 
 
+import lk.ijse.web_pos_backend.cutomObj.CustomerResponse;
 import lk.ijse.web_pos_backend.dto.impl.CustomerDTO;
 import lk.ijse.web_pos_backend.exception.CustomerNotFoundException;
 import lk.ijse.web_pos_backend.exception.DataPersistFailedException;
@@ -12,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/customers")
@@ -74,5 +77,18 @@ public class CustomerController {
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    //Get Customer
+    @GetMapping(value = "/{customerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CustomerResponse getSelectCustomer(@PathVariable("customerId") String customerId){
+        return customerService.getSelectCustomer(customerId);
+
+    }
+
+    //Get All Customers
+    @GetMapping(value = "allCustomers", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<CustomerDTO> getAllCustomers(){
+        return customerService.getAllCustomers();
     }
 }
